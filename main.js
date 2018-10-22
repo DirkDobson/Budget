@@ -47,6 +47,7 @@ const { createStore, combineReducers, compose } = Redux
 
 const rootReducer = combineReducers({
   ledger,
+  items,
 })
 
 const store = createStore(
