@@ -1,9 +1,14 @@
 //Action Creators
 const ADD_ENTRY = 'ADD_ENTRY'
+const REMOVE_ENTRY = 'REMOVE_ENTRY'
 
 //Actions
 const addEntry = (entry) => {
   return { type: ADD_ENTRY, entry }
+}
+
+const removeEntry = (index) => {
+  return { type: REMOVE_ENTRY,  index }
 }
 
 //Reducer
@@ -11,6 +16,8 @@ const ledger = (state = [], action) => {
   switch(action.type) {
     case ADD_ENTRY:
       return [...state, action.entry]
+    case REMOVE_ENTRY:
+      return state.filter( (_, i) => i !== action.index )
     default:
       return state
   }
@@ -53,6 +60,9 @@ const updateHistory = () => {
   list.innerHTML = null
   entries.forEach( (entry) => {
     const item = document.createElement('li')
+    const span = document.createElement('span')
+    const button = document.createElement('button')
+    
     item.innerHTML = `$${entry.amt} - ${entry.description}`
     item.className = entry.type
     list.append(item)
