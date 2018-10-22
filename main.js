@@ -58,12 +58,16 @@ const updateHistory = () => {
   const list = document.getElementById('history')
   const entries = store.getState().ledger
   list.innerHTML = null
-  entries.forEach( (entry) => {
+  entries.forEach( (entry, index) => {
     const item = document.createElement('li')
     const span = document.createElement('span')
     const button = document.createElement('button')
-    
-    item.innerHTML = `$${entry.amt} - ${entry.description}`
+
+    span.innerHTML = `$${entry.amt} - ${entry.description}`
+    button.addEventListener('click', () => store.dispatch(removeEntry(index)) )
+    button.innerText = 'Remove'
+    span.appendChild(button)
+    item.appendChild(span)
     item.className = entry.type
     list.append(item)
   })
