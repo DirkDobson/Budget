@@ -88,10 +88,21 @@ const updateHistory = () => {
   })
 }
 
+
+const formElements = (form) => {
+  const obj = {}
+  for (let el of form.elements) {
+    if (el.name)
+      obj[el.name] = el.value
+  }
+
+  return obj
+}
 const handleSubmit = (e) => {
   e.preventDefault()
   const obj = {}
   const form = e.target
+  const obj = formElements(form)
   for (let el of form.elements) {
     if (el.name)
       obj[el.name] = el.value
@@ -101,8 +112,16 @@ const handleSubmit = (e) => {
   form.reset()
 }
 
+const handleItemForm = (e) => {
+  e.preventDefault()
+  const form = e.target
+  const obj = formelements(form)
+  store.dispatch(addItem(obj))
+  form.reset()
+}
+
 const log = () => {
-  console.log( store.getState().ledger )
+  console.log( store.getState() )
 }
 
 store.subscribe(updateHistory)
@@ -110,3 +129,4 @@ store.subscribe(sumEntries)
 store.subscribe(log)
 
 document.getElementById('add_entry').addEventListener('submit', handleSubmit)
+document.getElementById('add_item').addEventListener('submit', handleItemForm)
