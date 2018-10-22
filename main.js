@@ -8,7 +8,7 @@ const addEntry = (entry) => {
 }
 
 const removeEntry = (index) => {
-  return { type: REMOVE_ENTRY,  index }
+  return { type: REMOVE_ENTRY, index }
 }
 
 //Reducer
@@ -45,12 +45,13 @@ const sumEntries = () => {
   const h1 = document.getElementById('total')
   h1.innerHTML = null
   const { ledger } = store.getState()
-  const value = ledger.reducef( (total, entry) => {
+  const value = ledger.reduce( (total, entry) => {
     const amt = parseFloat(entry.amt)
     if (entry.type === 'Credit')
       return total + amt
     return total - amt
   }, 0)
+
   h1.innerHTML = `$${value}`
 }
 
@@ -62,7 +63,6 @@ const updateHistory = () => {
     const item = document.createElement('li')
     const span = document.createElement('span')
     const button = document.createElement('button')
-
     span.innerHTML = `$${entry.amt} - ${entry.description}`
     button.addEventListener('click', () => store.dispatch(removeEntry(index)) )
     button.innerText = 'Remove'
