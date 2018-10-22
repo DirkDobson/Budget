@@ -1,6 +1,7 @@
 //Action Creators
 const ADD_ENTRY = 'ADD_ENTRY'
 const REMOVE_ENTRY = 'REMOVE_ENTRY'
+const ADD_ITEM = 'ADD_ITEM'
 
 //Actions
 const addEntry = (entry) => {
@@ -11,7 +12,20 @@ const removeEntry = (index) => {
   return { type: REMOVE_ENTRY, index }
 }
 
+const addItem = (item) => {
+  return { type: ADD_ITEM, item }
+}
+
 //Reducer
+
+const items = ( state = [], action ) => {
+  switch(aciton.type) {
+    case ADD_ITEM:
+      return [...state, action.item]
+    default:
+      return state
+  }
+}
 const ledger = (state = [], action) => {
   switch(action.type) {
     case ADD_ENTRY:
