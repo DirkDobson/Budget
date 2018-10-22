@@ -34,6 +34,19 @@ const store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION && window.__REDUX_DEVTOOLS_EXTENSION()
 )
 
+const sumEntries = () => {
+  const h1 = document.getElementById('total')
+  h1.innerHTML = null
+  const { ledger } = store.getState()
+  const value = ledger.reducef( (total, entry) => {
+    const amt = parseFloat(entry.amt)
+    if (entry.type === 'Credit')
+      return total + amt
+    return total - amt
+  }, 0)
+  h1.innerHTML = `$${value}`
+}
+
 const updateHistory = () => {
   const list = document.getElementById('history')
   const entries = store.getState().ledger
@@ -64,7 +77,7 @@ const log = () => {
 }
 
 store.subscribe(updateHistory)
-store.subscribe( () => console.log('Store Changed') )
+store.subscribe(sumEntries)
 store.subscribe(log)
 
 document.getElementById('add_entry').addEventListener('submit', handleSubmit)
