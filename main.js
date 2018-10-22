@@ -52,7 +52,7 @@ const handleSubmit = (e) => {
   const form = e.target
   for (let el of form.elements) {
     if (el.name)
-      obj[el.name] = encodeURIComponent(el.value)
+      obj[el.name] = el.value
   }
 
   store.dispatch(addEntry(obj))
