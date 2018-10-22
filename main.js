@@ -2,6 +2,7 @@
 const ADD_ENTRY = 'ADD_ENTRY'
 const REMOVE_ENTRY = 'REMOVE_ENTRY'
 const ADD_ITEM = 'ADD_ITEM'
+const TOGGLE_SHOW = 'TOGGLE_SHOW'
 
 //Actions
 const addEntry = (entry) => {
@@ -16,16 +17,28 @@ const addItem = (item) => {
   return { type: ADD_ITEM, item }
 }
 
-//Reducer
+const toggleShow = () => {
+  return { type: TOGGLE_SHOW }
+}
 
+//Reducer
+const showAll = ( state = true, action ) => {
+  switch( action.type) {
+    case TOGGLE_SHOW:
+      return !state
+    default:
+    return state
+  }
+}
 const items = ( state = [], action ) => {
-  switch(aciton.type) {
+  switch(action.type) {
     case ADD_ITEM:
       return [...state, action.item]
     default:
       return state
   }
 }
+
 const ledger = (state = [], action) => {
   switch(action.type) {
     case ADD_ENTRY:
@@ -48,6 +61,7 @@ const { createStore, combineReducers, compose } = Redux
 const rootReducer = combineReducers({
   ledger,
   items,
+  showAll
 })
 
 const store = createStore(
@@ -56,18 +70,27 @@ const store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION && window.__REDUX_DEVTOOLS_EXTENSION()
 )
 
+const filterShow = (e) => {
+  const { showAll } = store.getState()
+  e.target.innerHTML = showAll ? 'Show All' : 'Affordable'
+  store.dispatch(toggleShow())
+}
+
 const sumEntries = () => {
   const h1 = document.getElementById('total')
   h1.innerHTML = null
-  const { ledger } = store.getState()
-  const value = ledger.reduce( (total, entry) => {
+  const value = sumTotal()
+  h1.innerHTML = `$${value}`
+}
+
+const sumtotal = () => {
+  const {ledger } = store.getState()
+  return ledger.reduce( (total, entry) => {
     const amt = parseFloat(entry.amt)
-    if (entry.type === 'Credit')
+    if (entry.type ==='Credit')
       return total + amt
     return total - amt
   }, 0)
-
-  h1.innerHTML = `$${value}`
 }
 
 const updateHistory = () => {
@@ -88,6 +111,19 @@ const updateHistory = () => {
   })
 }
 
+const updateItems = () => {
+  const list = document.getElementById('items')
+  list.innerHTML = null
+  const { items, showAll } = store.getState()
+  const total = sumTotal()
+  const affordable = items.filter( i => parseFloat(i.cost) <= total)
+  const filtered = showAll ? items : affordable
+  filtered.forEach( (item) => {
+    const li = document.createElement('li')
+    li.innerHTML = `$${item.cost} - ${item.description}`
+    list.appendChild(li)
+  })
+}
 
 const formElements = (form) => {
   const obj = {}
@@ -98,15 +134,11 @@ const formElements = (form) => {
 
   return obj
 }
+
 const handleSubmit = (e) => {
   e.preventDefault()
-  const obj = {}
   const form = e.target
   const obj = formElements(form)
-  for (let el of form.elements) {
-    if (el.name)
-      obj[el.name] = el.value
-  }
 
   store.dispatch(addEntry(obj))
   form.reset()
@@ -115,7 +147,7 @@ const handleSubmit = (e) => {
 const handleItemForm = (e) => {
   e.preventDefault()
   const form = e.target
-  const obj = formelements(form)
+  const obj = formElements(form)
   store.dispatch(addItem(obj))
   form.reset()
 }
@@ -127,6 +159,8 @@ const log = () => {
 store.subscribe(updateHistory)
 store.subscribe(sumEntries)
 store.subscribe(log)
+store.subscribe(updateItems)
 
 document.getElementById('add_entry').addEventListener('submit', handleSubmit)
 document.getElementById('add_item').addEventListener('submit', handleItemForm)
+document.getElementById('show').addEventListener('click', filterShow)
