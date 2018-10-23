@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { removeEntry } from '../reudcers/entry'
+import { removeEntry } from '../reudcers/ledger'
 import { Button } from './Shared'
 
 const Item = styled.li`
