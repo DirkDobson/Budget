@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addItems } from '../reducers/items'
+import { addItem } from '../reducers/items'
 import {
   Input,
   Button,
@@ -19,7 +19,7 @@ class WishListForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.dispatch(addItems(this.state))
+    this.props.dispatch(addItem(this.state))
     this.setState(this.defaultState)
   }
 
