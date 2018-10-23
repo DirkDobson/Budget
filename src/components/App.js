@@ -1,7 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
 import Ledger from './Ledger'
 import WishList from './WishList'
+import LedgerForm from './LedgerForm'
+import WishListForm from './WishListForm'
+import { Flex } from './Shared'
+
 
 const Container = styled.div`
   display: flex;
@@ -9,10 +12,16 @@ const Container = styled.div`
 `
 
 const App = () => (
-  <Container>
-    <Ledger />
-    <WishList />
-  </Container>
+  <div>
+    <Flex alignItems="stretch">
+      <LedgerFrom />
+      <WishListForm />
+    </Flex>
+    <Flex justifyContent="space-around">
+      <Ledger />
+      <WishList />
+    </Flex>
+  </div>
 )
 
 export default App
