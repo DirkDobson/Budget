@@ -4,17 +4,18 @@ import WishList from './WishList'
 import LedgerForm from './LedgerForm'
 import WishListForm from './WishListForm'
 import { Flex } from './Shared'
+import { connect } from 'react-redux'
+import { getEntries } from '../reducers/ledger'
 
-
-const Container = styled.div`
-  display: flex;
-  justify-content: space-around;
-`
-
-const App = () => (
+class App extends React.Component {
+  componentDidMount() {
+    this.props.dispatch(getEntries())
+  }
+  render() {
+    return (
   <div>
     <Flex alignItems="stretch">
-      <LedgerFrom />
+      <LedgerForm />
       <WishListForm />
     </Flex>
     <Flex justifyContent="space-around">
@@ -22,6 +23,8 @@ const App = () => (
       <WishList />
     </Flex>
   </div>
-)
+    )
+  }
+}
 
-export default App
+export default connect()(App)
