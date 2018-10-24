@@ -9,7 +9,7 @@ export const login = (credentials, cb) => {
     axios.post('/api/auth/sign_in', credentials)
      .then( res => {
        dispatch({ type: LOGIN, user: res.data.data })
-       cb()
+       history.pushState('/')
     })
   }
 }
@@ -29,7 +29,7 @@ export const logout = (cb = f => f) => {
     axios.delete('/api/auth/sign_out')
       .then( () => {
         dispatch({ type: LOGOUT})
-        cb() 
+        history.push('/')
     })
   }
 }
